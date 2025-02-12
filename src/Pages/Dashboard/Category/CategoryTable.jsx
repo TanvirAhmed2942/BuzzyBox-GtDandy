@@ -78,7 +78,7 @@ function CategoryTable() {
       title: "Slider Image",
       dataIndex: "sliderimg",
       key: "sliderimg",
-      render: (sliderimg) => <img width={100} src={sliderimg} alt="slider" />,
+      render: (sliderimg) => <img width={60} src={sliderimg} alt="slider" />,
     },
     {
       title: "Name",

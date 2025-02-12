@@ -35,7 +35,7 @@ const Header = () => {
     >
       <Flex
         align="center"
-        className="w-100% px-10 py-2 shadow-md overflow-auto"
+        className="w-100% px-10 py-2 shadow-md overflow-auto bg-white"
       >
         {/* Logo on the left with flex-grow */}
         <div className="flex-1">

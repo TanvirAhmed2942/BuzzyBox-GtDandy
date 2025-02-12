@@ -1,21 +1,192 @@
 import React, { useState } from "react";
-import { Modal, Flex, Input, Upload, message, Form } from "antd";
-import { CloudUploadOutlined, PlusOutlined } from "@ant-design/icons";
-
-import CategoryTable from "./CategoryTable";
+import {
+  Table,
+  ConfigProvider,
+  Modal,
+  Form,
+  Input,
+  Upload,
+  message,
+  Button,
+} from "antd";
+import {
+  PlusOutlined,
+  CloudUploadOutlined,
+  CloseCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import ButtonEDU from "../../../components/common/ButtonEDU";
-
-const { Dragger } = Upload;
+import gift from "../../../assets/gtdandy/gift.png";
+import { FiEdit2 } from "react-icons/fi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 function Category() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [form] = Form.useForm();
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [editingKey, setEditingKey] = useState(null);
+  const [tableData, setTableData] = useState([
+    { key: "1", name: "John Brown", serial: 1, sliderimg: gift },
+    { key: "2", name: "Jim Green", serial: 2, sliderimg: gift },
+    { key: "3", name: "Joe Black", serial: 3, sliderimg: gift },
+    {
+      key: "4",
+      serial: 4,
+      sliderimg: gift,
+      name: "Mountain Escape",
+    },
+    {
+      key: "5",
+      serial: 5,
+      sliderimg: gift,
+      name: "Sunset Glow",
+    },
+    {
+      key: "6",
+      serial: 6,
+      sliderimg: gift,
+      name: "City Lights",
+    },
+  ]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingRecord, setDeletingRecord] = useState(null);
 
-  const showModal = () => setIsModalOpen(true);
-  const handleCancel = () => setIsModalOpen(false);
+  const showModal = () => {
+    setIsEditing(false);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    form.resetFields();
+    setUploadedImage(null);
+    setEditingKey(null);
+  };
+
+  const handleFormSubmit = (values) => {
+    if (!uploadedImage && !isEditing) {
+      message.error("Please upload an image!");
+      return;
+    }
+
+    if (isEditing) {
+      // Update existing row
+      const updatedData = tableData.map((item) =>
+        item.key === editingKey
+          ? {
+              ...item,
+              name: values.name,
+              sliderimg: uploadedImage || item.sliderimg,
+            }
+          : item
+      );
+      setTableData(updatedData);
+      message.success("Slider updated successfully!");
+    } else {
+      // Add new row
+      setTableData([
+        ...tableData,
+        {
+          key: (tableData.length + 1).toString(),
+          name: values.name,
+          serial: tableData.length + 1,
+          sliderimg: uploadedImage,
+        },
+      ]);
+      message.success("Slider added successfully!");
+    }
+
+    handleCancel();
+  };
+
+  const handleImageUpload = (info) => {
+    const file = info.file.originFileObj;
+    if (!file) return;
+
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("You can only upload image files!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUploadedImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleEdit = (record) => {
+    setIsEditing(true);
+    setEditingKey(record.key);
+    setUploadedImage(record.sliderimg);
+    form.setFieldsValue({ name: record.name });
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (key, name) => {
+    setDeletingRecord({ key, name });
+    setIsDeleteModalOpen(true);
+  };
+
+  const onConfirmDelete = () => {
+    setTableData(tableData.filter((item) => item.key !== deletingRecord.key));
+    message.success("Slider deleted successfully!");
+    setIsDeleteModalOpen(false);
+  };
+
+  const onCancelDelete = () => {
+    message.info("Delete action canceled.");
+    setIsDeleteModalOpen(false);
+  };
+
+  const columns = [
+    {
+      title: "Sl",
+      dataIndex: "serial",
+      key: "serial",
+      render: (serial) => (
+        <p className="font-bold text-black text-[16px]">
+          {serial < 10 ? "0" + serial : serial}
+        </p>
+      ),
+    },
+    {
+      title: "Slider Image",
+      dataIndex: "sliderimg",
+      key: "sliderimg",
+      render: (sliderimg) => <img width={60} src={sliderimg} alt="slider" />,
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <div className="flex gap-4">
+          <FiEdit2
+            style={{ fontSize: 24 }}
+            className="text-black hover:text-blue-500 cursor-pointer"
+            onClick={() => handleEdit(record)}
+          />
+          <RiDeleteBin6Line
+            style={{ fontSize: 24 }}
+            className="text-black hover:text-red-500 cursor-pointer"
+            onClick={() => handleDelete(record.key, record.name)}
+          />
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <>
-      <div className="flex justify-between items-center px-10 py-5">
+    <div className="px-10 py-5">
+      <div className="flex justify-between items-center py-5">
         <h1 className="text-[20px] font-medium">Category</h1>
         <button
           className="bg-gtdandy text-white px-4 py-2.5 rounded-md flex items-center"
@@ -26,125 +197,111 @@ function Category() {
         </button>
       </div>
 
-      <CategoryTable />
+      <ConfigProvider
+        theme={{
+          components: {
+            Table: {
+              rowSelectedBg: "#fef9eb",
+              headerBg: "#fef9eb",
+            },
+            Pagination: {
+              itemActiveBg: "#FFC301",
+              itemBg: "black",
+              borderRadius: "50px",
+              colorText: "white",
+            },
+          },
+        }}
+      >
+        <Table
+          columns={columns}
+          dataSource={tableData}
+          pagination={{
+            pageSizeOptions: [5, 10, 15, 20],
+            defaultPageSize: 5,
+            position: ["bottomCenter"],
+          }}
+        />
+      </ConfigProvider>
 
+      {/* Delete Confirmation Modal */}
       <Modal
-        title="Add Category"
+        title="Delete Confirmation"
+        visible={isDeleteModalOpen}
+        onCancel={onCancelDelete}
+        footer={null}
+        centered
+      >
+        <div className="flex flex-col justify-between gap-5">
+          <div className="flex justify-center">
+            Are you sure you want to delete{" "}
+            <span className="font-bold ml-1">{deletingRecord?.name}</span>?
+          </div>
+          <div className="flex justify-center gap-4">
+            <ButtonEDU actionType="cancel" onClick={onCancelDelete} />
+            <ButtonEDU actionType="delete" onClick={onConfirmDelete} />
+          </div>
+        </div>
+      </Modal>
+
+      {/* Modal Form */}
+      <Modal
+        title={isEditing ? "Edit Category" : "Add Category"}
         open={isModalOpen}
         onCancel={handleCancel}
         centered
         footer={null}
       >
-        <AddCategory onClose={handleCancel} />
+        <ConfigProvider
+          theme={{
+            components: {
+              Form: {
+                labelFontSize: 16,
+              },
+            },
+          }}
+        >
+          <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter the name!" }]}
+            >
+              <Input placeholder="Enter slider name" className="h-12" />
+            </Form.Item>
+
+            <Form.Item label="Upload Image">
+              {uploadedImage ? (
+                <div className="relative">
+                  <img src={uploadedImage} alt="Uploaded" width={100} />
+                  <CloseCircleOutlined
+                    className="absolute top-0 right-0 text-red-500 cursor-pointer"
+                    onClick={() => setUploadedImage(null)}
+                  />
+                </div>
+              ) : (
+                <Upload
+                  name="image"
+                  listType="picture-card"
+                  showUploadList={false}
+                  onChange={handleImageUpload}
+                >
+                  <button style={{ border: 0, background: "none" }}>
+                    <CloudUploadOutlined style={{ fontSize: 24 }} />
+                    <div>Upload</div>
+                  </button>
+                </Upload>
+              )}
+            </Form.Item>
+
+            <div className="flex justify-end">
+              <ButtonEDU actionType="save" />
+            </div>
+          </Form>
+        </ConfigProvider>
       </Modal>
-    </>
+    </div>
   );
 }
 
 export default Category;
-
-// ✅ Fixed AddCategory Component
-const AddCategory = ({ onClose }) => {
-  const [form] = Form.useForm();
-
-  const handleSubmit = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        console.log("Category Data:", values);
-        message.success("Category added successfully!");
-        onClose(); // Close modal
-      })
-      .catch((errorInfo) => {
-        console.log("Validation Failed:", errorInfo);
-      });
-  };
-
-  return (
-    <Form form={form} layout="vertical">
-      <Flex vertical gap={20} className="py-5">
-        {/* ✅ Fixed Label for Image */}
-        <Flex vertical gap={5}>
-          <label>
-            Name <span className="text-red-600 text-[18px] ml-1">*</span>
-          </label>
-          <Form.Item
-            name="name"
-            rules={[{ required: true, message: "Please enter category name!" }]}
-          >
-            <Input placeholder="Enter category name" className="h-12" />
-          </Form.Item>
-        </Flex>
-
-        <Flex vertical gap={5}>
-          <label>
-            Image <span className="text-red-600 text-[18px] ml-1">*</span>
-          </label>
-          <Form.Item
-            name="image"
-            rules={[{ required: true, message: "Please upload an image!" }]}
-          >
-            <UploadImg />
-          </Form.Item>
-        </Flex>
-      </Flex>
-
-      <div className="flex justify-end gap-4">
-        <ButtonEDU actionType="cancel" onClick={onClose} />
-        <ButtonEDU actionType="update" onClick={handleSubmit} />
-      </div>
-    </Form>
-  );
-};
-
-// ✅ Fixed Upload Image Component with Validation
-const UploadImg = () => {
-  const [fileList, setFileList] = useState([]);
-
-  const props = {
-    name: "file",
-    multiple: false,
-    fileList,
-    beforeUpload: (file) => {
-      const isJpgOrPng =
-        file.type === "image/jpeg" || file.type === "image/png";
-      if (!isJpgOrPng) {
-        message.error("You can only upload JPG/PNG files!");
-        return Upload.LIST_IGNORE;
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error("Image must be smaller than 2MB!");
-        return Upload.LIST_IGNORE;
-      }
-      return true;
-    },
-    onChange(info) {
-      let newFileList = [...info.fileList];
-
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} uploaded successfully.`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} upload failed.`);
-      }
-
-      setFileList(newFileList);
-    },
-    onRemove: (file) => {
-      setFileList((prevList) =>
-        prevList.filter((item) => item.uid !== file.uid)
-      );
-    },
-  };
-
-  return (
-    <Dragger {...props}>
-      <p className="ant-upload-drag-icon">
-        <CloudUploadOutlined style={{ color: "#ffc301", fontSize: "30px" }} />
-      </p>
-      <p className="ant-upload-hint text-[10px]">
-        Upload Image (Max: 2MB, .jpg, .png)
-      </p>
-    </Dragger>
-  );
-};

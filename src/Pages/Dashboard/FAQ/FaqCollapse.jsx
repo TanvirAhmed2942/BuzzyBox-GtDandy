@@ -138,7 +138,7 @@ export default function FaqCollapse() {
           theme={{
             components: {
               Form: {
-                labelFontSize: 20,
+                labelFontSize: 16,
                 itemMarginBottom: 8,
               },
             },

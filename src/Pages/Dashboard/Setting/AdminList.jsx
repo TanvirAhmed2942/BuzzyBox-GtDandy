@@ -192,7 +192,27 @@ const AdminList = () => {
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Please enter Email" }]}
+              rules={[
+                { required: true, message: "Please enter Email" },
+                {
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Please enter a valid email address",
+                },
+                {
+                  validator: (_, value) => {
+                    // Ensure no characters after .com
+                    if (value && value.includes(".com")) {
+                      const emailAfterDot = value.split(".com")[1];
+                      if (emailAfterDot && emailAfterDot.length > 0) {
+                        return Promise.reject(
+                          "No characters should be after .com"
+                        );
+                      }
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               <Input placeholder="Email" className="h-12" />
             </Form.Item>
@@ -243,7 +263,27 @@ const AdminList = () => {
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Please enter Email" }]}
+              rules={[
+                { required: true, message: "Please enter Email" },
+                {
+                  pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Please enter a valid email address",
+                },
+                {
+                  validator: (_, value) => {
+                    // Ensure no characters after .com
+                    if (value && value.includes(".com")) {
+                      const emailAfterDot = value.split(".com")[1];
+                      if (emailAfterDot && emailAfterDot.length > 0) {
+                        return Promise.reject(
+                          "No characters should be after .com"
+                        );
+                      }
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               <Input placeholder="Email" className="h-12" />
             </Form.Item>

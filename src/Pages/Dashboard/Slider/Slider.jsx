@@ -185,6 +185,7 @@ function Slider() {
             Table: {
               rowSelectedBg: "#fef9eb",
               headerBg: "#fef9eb",
+              cellFontSize: "17px",
             },
             Pagination: {
               itemActiveBg: "#FFC301",

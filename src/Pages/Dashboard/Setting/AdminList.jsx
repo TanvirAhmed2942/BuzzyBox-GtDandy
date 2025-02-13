@@ -9,6 +9,7 @@ import {
   Modal,
   Form,
   ConfigProvider,
+  message,
 } from "antd";
 import { MoreOutlined, DeleteFilled, EditFilled } from "@ant-design/icons";
 
@@ -76,20 +77,27 @@ const AdminList = () => {
   const handleCancelAdd = () => {
     setIsAddModalOpen(false);
     addFormRef.current?.resetFields();
+    message.info("Admin addition cancelled.");
   };
 
-  // Handle Add Admin Submission
   const handleAddAdmin = (values) => {
+    // Ensure characters after ".com" are removed
+    const cleanEmail = values.email.replace(/\.com.*/i, ".com");
+
     const newAdmin = {
       key: admins.length + 1,
       ...values,
+      email: cleanEmail, // Apply cleaned email
       creationdate: new Date().toLocaleDateString(),
     };
+
     const updatedAdmins = [...admins, newAdmin];
     setAdmins(updatedAdmins);
     setFilteredData(updatedAdmins);
     setIsAddModalOpen(false);
     addFormRef.current?.resetFields();
+
+    message.success("Admin added successfully!");
   };
 
   // Open Edit Admin Modal
@@ -105,16 +113,23 @@ const AdminList = () => {
   const handleCancelEdit = () => {
     setIsEditModalOpen(false);
     editFormRef.current?.resetFields();
+    message.info("Admin edit cancelled.");
   };
 
-  // Handle Edit Admin Submission
   const handleEditAdmin = (values) => {
+    // Ensure characters after ".com" are removed
+    const cleanEmail = values.email.replace(/\.com.*/i, ".com");
+
     const updatedAdmins = admins.map((admin) =>
-      admin.key === selectedAdmin.key ? { ...admin, ...values } : admin
+      admin.key === selectedAdmin.key
+        ? { ...admin, ...values, email: cleanEmail }
+        : admin
     );
     setAdmins(updatedAdmins);
     setFilteredData(updatedAdmins);
     setIsEditModalOpen(false);
+
+    message.success("Admin updated successfully!");
   };
 
   // Open Delete Admin Modal
@@ -132,6 +147,8 @@ const AdminList = () => {
     setAdmins(updatedAdmins);
     setFilteredData(updatedAdmins);
     setIsDeleteModalOpen(false);
+
+    message.success("Admin deleted successfully!");
   };
 
   return (
@@ -221,21 +238,21 @@ const AdminList = () => {
               name="name"
               rules={[{ required: true, message: "Please enter Name" }]}
             >
-              <Input className="h-12" />
+              <Input placeholder="Name" className="h-12" />
             </Form.Item>
             <Form.Item
               label="Email"
               name="email"
               rules={[{ required: true, message: "Please enter Email" }]}
             >
-              <Input className="h-12" />
+              <Input placeholder="Email" className="h-12" />
             </Form.Item>
             <Form.Item
               label="Role"
               name="role"
               rules={[{ required: true, message: "Please enter Role" }]}
             >
-              <Input className="h-12" />
+              <Input placeholder="Role" className="h-12" />
             </Form.Item>
 
             <div className="flex justify-end gap-4 mt-4">
@@ -267,24 +284,21 @@ const AdminList = () => {
     </div>
   );
 };
-
-const TableHead = ({ searchText, handleSearch, onAdd }) => (
-  <Flex justify="space-between" align="center" className="mt-2 full">
-    <Input
-      placeholder="Search by Name or Email"
-      value={searchText}
-      onChange={handleSearch}
-      className="w-56 h-12"
-    />
-    <h1
-      className="bg-gtdandy flex items-center justify-center gap-2 px-5 py-3 rounded-md text-white w-36 cursor-pointer"
-      onClick={onAdd}
-    >
-      <FaPlus /> Add Admin
-    </h1>
-  </Flex>
-);
-
+const TableHead = ({ searchText, handleSearch, onAdd }) => {
+  return (
+    <div className="flex justify-between items-center mb-4">
+      <Input
+        placeholder="Search admins..."
+        value={searchText}
+        onChange={handleSearch}
+        className="w-1/3"
+      />
+      <ButtonEDU actionType="add" icon={<FaPlus />} onClick={onAdd}>
+        Add Admin
+      </ButtonEDU>
+    </div>
+  );
+};
 const TableBody = ({ filteredData, onEdit, onDelete }) => (
   <Table
     rowKey={(record) => record.key}
@@ -293,6 +307,24 @@ const TableBody = ({ filteredData, onEdit, onDelete }) => (
     pagination={false}
     className="mt-5"
   />
+);
+
+const DeleteAdmin = ({ name, onConfirm, onCancel }) => (
+  <Flex
+    vertical
+    justify="space-between"
+    className="w-full h-full mb-3 mt-3"
+    gap={20}
+  >
+    <Flex align="center" justify="center">
+      Are you sure you want to delete{" "}
+      <span className="font-bold ml-1">{name}</span>?
+    </Flex>
+    <div className="flex items-center justify-center gap-4">
+      <ButtonEDU actionType="cancel" onClick={onCancel} />
+      <ButtonEDU actionType="delete" onClick={onConfirm} />
+    </div>
+  </Flex>
 );
 
 const columns = (onEdit, onDelete) => [
@@ -320,21 +352,4 @@ const columns = (onEdit, onDelete) => [
     ),
   },
 ];
-const DeleteAdmin = ({ name, onConfirm, onCancel }) => (
-  <Flex
-    vertical
-    justify="space-between"
-    className="w-full h-full mb-3 mt-3"
-    gap={20}
-  >
-    <Flex align="center" justify="center">
-      Are you sure you want to delete{" "}
-      <span className="font-bold ml-1">{name}</span>?
-    </Flex>
-    <div className="flex items-center justify-center gap-4">
-      <ButtonEDU actionType="cancel" onClick={onCancel} />
-      <ButtonEDU actionType="delete" onClick={onConfirm} />
-    </div>
-  </Flex>
-);
 export default AdminList;

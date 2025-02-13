@@ -9,6 +9,7 @@ function AdminPassword() {
   // Handle cancel: Reset form fields
   const handleCancel = () => {
     form.resetFields();
+    message.info("Password change cancelled.");
   };
 
   // Handle save: Validate, trim, and submit form
@@ -54,7 +55,7 @@ function AdminPassword() {
           theme={{
             components: {
               Form: {
-                labelFontSize: 20,
+                labelFontSize: 16,
               },
             },
           }}

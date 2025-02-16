@@ -123,7 +123,7 @@ export default function FaqCollapse() {
           </div>
         )}
         items={getItems()}
-        className="shadow-md "
+        className="shadow-md bg-white"
       />
 
       {/* Add/Edit FAQ Modal */}

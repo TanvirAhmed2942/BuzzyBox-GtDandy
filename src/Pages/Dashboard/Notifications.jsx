@@ -66,8 +66,10 @@ const Notifications = () => {
           theme={{
             components: {
               Pagination: {
-                itemActiveBg: "#6C57EC",
-                borderRadius: "100%",
+                itemActiveBg: "#FFC301",
+                itemBg: "black",
+                borderRadius: "50px",
+                colorText: "white",
               },
             },
             token: {

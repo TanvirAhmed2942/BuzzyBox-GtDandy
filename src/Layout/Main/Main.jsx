@@ -7,7 +7,7 @@ import { Col, Flex, Row } from "antd";
 import { Grid } from "antd";
 const Main = () => {
   return (
-    <div className=" h-[100vh] bg-slate-50">
+    <div className=" h-[100vh] bg-[#f8f8f8]">
       <Flex vertical gap={20}>
         <Row>
           <Col span={24} className="z-10">

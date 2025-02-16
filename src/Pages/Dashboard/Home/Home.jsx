@@ -28,7 +28,7 @@ const Card = ({ item }) => {
         gap={5}
         justify="space-between"
         align="center"
-        className="bg-white rounded-md shadow-[0px_10px_100px_3px_rgba(0,_0,_0,_0.1)] w-[30%] h-36 px-8"
+        className="bg-white rounded-md  w-[30%] h-36 px-8 shadow-md"
       >
         <Flex
           vertical
@@ -78,11 +78,11 @@ const Home = () => {
               { value: "apr2025", label: "Apr 2025" },
               { value: "may2025", label: "May 2025" },
             ]}
-            className="shadow-[0px_10px_100px_3px_rgba(0,_0,_0,_0.1)] absolute top-0 right-0"
+            className=" absolute top-0 right-0 shadow-md"
           />
         </div>
       </div>
-      <div className="w-full h-[360px] p-4 bg-white rounded mt-4 relative shadow-[0px_10px_100px_3px_rgba(0,_0,_0,_0.1)]">
+      <div className="w-full h-[360px] p-4 bg-white rounded mt-4 relative shadow-md">
         <h2 className="text-lg font-medium mb-2 py-2 px-3">Monthly Earnings</h2>
         <Filter />
         <AreaCharts />

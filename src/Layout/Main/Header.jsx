@@ -15,7 +15,7 @@ const Header = () => {
 
   const items = [
     {
-      label: <Link to="/login">Log Out</Link>,
+      label: <Link to="auth/login">Log Out</Link>,
       key: "0",
     },
   ];

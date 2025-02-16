@@ -56,7 +56,7 @@ const Contact = () => {
     <div className="px-10 py-5">
       <h1 className="text-[20px] font-medium mb-5">Contact</h1>
       <Flex vertical justify="center" gap={30} className="w-full">
-        <div className="flex items-center justify-normal bg-white p-12 w-4/5 gap-4 rounded-xl shadow-[0px_11px_55px_-3px_rgba(0,_0,_0,_0.1)]">
+        <div className="flex items-center justify-normal bg-white p-12 w-4/5 gap-4 rounded-xl ">
           {[
             {
               icon: <LiaPhoneVolumeSolid size={50} />,
@@ -81,7 +81,7 @@ const Contact = () => {
               align="center"
               className="flex-auto"
             >
-              <div className="bg-white rounded-xl shadow-[0px_0px_47px_4px_rgba(0,_0,_0,_0.1)] p-4 hover:bg-gtdandy text-gtdandy hover:text-black">
+              <div className="bg-white rounded-xl shadow-[0px_0px_15px_4px_rgba(0,_0,_0,_0.1)] p-4 hover:bg-gtdandy text-gtdandy hover:text-black">
                 {item.icon}
               </div>
               <div className="flex flex-col items-center">

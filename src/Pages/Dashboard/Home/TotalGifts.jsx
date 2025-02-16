@@ -23,7 +23,7 @@ export default function TotalGifts() {
   ];
 
   return (
-    <div className="w-1/2 h-[300px] bg-white p-4 rounded-md mt-4 relative shadow-[0px_10px_100px_3px_rgba(0,_0,_0,_0.1)]">
+    <div className="w-1/2 h-[300px] bg-white p-4 rounded-md mt-4 relative shadow-md">
       <h2 className="text-lg font-medium mb-4 ml-4">Total users statistics</h2>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart

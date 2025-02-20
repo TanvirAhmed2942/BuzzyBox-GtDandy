@@ -48,7 +48,7 @@ export default function TotalGifts() {
           />
         </LineChart>
       </ResponsiveContainer>
-      <Filter className="absolute" />
+      <Filter className="absolute" picker="year" />
     </div>
   );
 }

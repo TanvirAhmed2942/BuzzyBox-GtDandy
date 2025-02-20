@@ -50,7 +50,7 @@ export default function UserStatistics() {
           <Bar dataKey="pv" fill="#ffc301" barSize={25} />
         </BarChart>
       </ResponsiveContainer>
-      <Filter className="absolute" />
+      <Filter className="absolute" picker="year" />
     </div>
   );
 }

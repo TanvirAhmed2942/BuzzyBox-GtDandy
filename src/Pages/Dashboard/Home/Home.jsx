@@ -14,7 +14,8 @@ import growth from "../../../assets/gtdandy/growth.png";
 import UserStatistics from "./UserStatistics";
 import TotalGifts from "./TotalGifts";
 import TinyAreaChart from "./TinyAreaChart";
-
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 const stats = [
   { label: "Active User", value: "1000", icon: <UserOutlined /> },
   { label: "Card Sent", value: "1200", icon: <GiftOutlined /> },
@@ -67,24 +68,18 @@ const Home = () => {
           {stats.map((item, index) => (
             <Card key={index} item={item} />
           ))}
-          <Select
-            defaultValue="jan2025"
-            style={{ width: 120 }}
-            onChange={handleChange}
-            options={[
-              { value: "jan2025", label: "Jan 2025" },
-              { value: "feb2025", label: "Feb 2025" },
-              { value: "mar2025", label: "Mar 2025" },
-              { value: "apr2025", label: "Apr 2025" },
-              { value: "may2025", label: "May 2025" },
-            ]}
-            className=" absolute top-0 right-0 shadow-md"
+
+          <DatePicker
+            className="absolute top-0 right-0 w-32"
+            picker="month"
+            placeholder="Jan"
+            format="MMM YYYY" // Formats as "Dec 2025"
           />
         </div>
       </div>
       <div className="w-full h-[360px] p-4 bg-white rounded mt-4 relative shadow-md">
         <h2 className="text-lg font-medium mb-2 py-2 px-3">Monthly Earnings</h2>
-        <Filter />
+        <Filter picker="year" />
         <AreaCharts />
       </div>
 

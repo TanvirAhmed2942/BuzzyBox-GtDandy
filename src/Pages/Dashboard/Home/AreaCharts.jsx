@@ -46,7 +46,11 @@ function AreaCharts() {
           strokeWidth={0.5}
           vertical={false}
         />
-        <Tooltip />
+        <Tooltip
+          content={<CustomTooltip />}
+          // cursor={{ fill: "transparent" }}
+          cursor={false}
+        />
         <Area
           type="monotone"
           dataKey="pv"
@@ -61,3 +65,23 @@ function AreaCharts() {
 }
 
 export default AreaCharts;
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="relative flex items-center ml-4">
+        {/* Arrow (pointing left) */}
+        <div className="absolute w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gtdandy -left-2"></div>
+
+        {/* Tooltip Content */}
+        <div className="bg-gtdandy p-2 text-white rounded shadow-md ">
+          {payload.map((pld, index) => (
+            <div key={index}>{pld.value}K</div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};

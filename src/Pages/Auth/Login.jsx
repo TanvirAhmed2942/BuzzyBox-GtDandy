@@ -21,7 +21,9 @@ const Login = () => {
       <Form onFinish={onFinish} layout="vertical">
         <Form.Item
           name="email"
-          label={<p>Enter Your Email</p>}
+          label={
+            <p className="text-black font-normal text-base">Enter Your Email</p>
+          }
           rules={[
             {
               required: true,

@@ -221,7 +221,19 @@ const AdminList = () => {
               name="role"
               rules={[{ required: true, message: "Please enter Role" }]}
             >
-              <Input placeholder="Role" className="h-12" />
+              <Input
+                placeholder="Admin"
+                className="h-12"
+                value="Admin"
+                disabled={true}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: "Password missing" }]}
+            >
+              <Input.Password placeholder="Set a Password" className="h-12" />
             </Form.Item>
 
             <div className="flex justify-end gap-4 mt-4">
@@ -331,7 +343,7 @@ const TableHead = ({ searchText, handleSearch, onAdd }) => {
         placeholder="Search admins..."
         value={searchText}
         onChange={handleSearch}
-        className="w-1/3"
+        className="w-1/3 h-10"
       />
       <ButtonEDU actionType="add" icon={<FaPlus />} onClick={onAdd}>
         Add Admin

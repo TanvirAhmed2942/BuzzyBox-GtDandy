@@ -9,7 +9,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Filter from "./Filter";
+
+import { WeeklyReport } from "./Filter";
 
 export default function TotalGifts() {
   const data = [
@@ -24,7 +25,7 @@ export default function TotalGifts() {
 
   return (
     <div className="w-1/2 h-[300px] bg-white p-4 rounded-md mt-4 relative shadow-md">
-      <h2 className="text-lg font-medium mb-4 ml-4">Total users statistics</h2>
+      <h2 className="text-lg font-medium mb-4 ml-4">Total Gift Sent</h2>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart
           data={data}
@@ -48,7 +49,7 @@ export default function TotalGifts() {
           />
         </LineChart>
       </ResponsiveContainer>
-      <Filter className="absolute" picker="year" />
+      <WeeklyReport />
     </div>
   );
 }

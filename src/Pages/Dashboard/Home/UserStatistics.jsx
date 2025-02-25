@@ -50,7 +50,11 @@ export default function UserStatistics() {
           <Bar dataKey="pv" fill="#ffc301" barSize={25} />
         </BarChart>
       </ResponsiveContainer>
-      <Filter className="absolute" picker="year" />
+      <Filter
+        className="absolute"
+        picker="year"
+        placeholder={new Date().getFullYear()}
+      />
     </div>
   );
 }

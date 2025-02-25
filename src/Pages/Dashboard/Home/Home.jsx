@@ -79,7 +79,7 @@ const Home = () => {
       </div>
       <div className="w-full h-[360px] p-4 bg-white rounded mt-4 relative shadow-md">
         <h2 className="text-lg font-medium mb-2 py-2 px-3">Monthly Earnings</h2>
-        <Filter picker="year" />
+        <Filter picker="year" placeholder={new Date().getFullYear()} />
         <AreaCharts />
       </div>
 

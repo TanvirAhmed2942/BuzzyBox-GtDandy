@@ -47,7 +47,7 @@ const Card = ({ item }) => {
             {item.value}
           </h1>
         </Flex>
-        <div className="w-52 h-36 ">
+        <div className="w-52 h-24">
           {/* <img src={growth} alt="growth" className="w-20 h-20" /> */}
 
           <TinyAreaChart />

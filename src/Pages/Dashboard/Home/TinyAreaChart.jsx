@@ -1,59 +1,48 @@
-import React from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import React, { useState, useEffect } from "react";
+import { AreaChart, Area, ResponsiveContainer } from "recharts";
 
-const data = [
-  { name: "Jan", pv: 2400, amt: 2400 },
-  { name: "Feb", pv: 1398, amt: 2210 },
-  { name: "Mar", pv: 9800, amt: 2290 },
-  { name: "Apr", pv: 3908, amt: 2000 },
-  { name: "May", pv: 4800, amt: 2181 },
-  { name: "Jun", pv: 3800, amt: 2500 },
-  { name: "Jul", pv: 4300, amt: 2100 },
-  { name: "Aug", pv: 3200, amt: 2600 },
-  { name: "Sep", pv: 4500, amt: 2700 },
-  { name: "Oct", pv: 5000, amt: 2800 },
-  { name: "Nov", pv: 5200, amt: 3000 },
-  { name: "Dec", pv: 6000, amt: 3200 },
-];
+const generateRandomData = () => {
+  let data = Array.from({ length: 12 }, (_, i) => ({
+    name: new Date(0, i).toLocaleString("en", { month: "short" }),
+    pv: Math.floor(Math.random() * 8000) + 1000,
+  }));
+  return data;
+};
 
 function TinyAreaChart() {
+  const [data, setData] = useState(generateRandomData());
+  const [isGrowing, setIsGrowing] = useState(true);
+
+  useEffect(() => {
+    // Determine growth by comparing first and last values
+    const growing = data[data.length - 1].pv >= data[0].pv;
+    setIsGrowing(growing);
+  }, [data]);
+
+  // Define colors based on growth status
+  const growthColor = "#00c853";
+  const declineColor = "#d50000";
+  const currentColor = isGrowing ? growthColor : declineColor;
+
+  // Create unique gradient IDs to prevent caching issues
+  const gradientId = isGrowing ? "growthGradient" : "declineGradient";
+
   return (
-    <ResponsiveContainer height={150}>
-      <AreaChart
-        width={20}
-        height={20}
-        data={data}
-        // margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-      >
+    <ResponsiveContainer>
+      <AreaChart data={data}>
         <defs>
-          <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#ffbf00" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#ffc301" stopOpacity={0} />
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor={currentColor} stopOpacity={0.8} />
+            <stop offset="100%" stopColor={currentColor} stopOpacity={0} />
           </linearGradient>
         </defs>
-        {/* <XAxis dataKey="name" />
-        <YAxis /> */}
-        {/* <CartesianGrid
-          strokeDasharray="10 10"
-          strokeWidth={0.5}
-          vertical={false}
-        /> */}
-        {/* <Tooltip /> */}
         <Area
           type="monotone"
           dataKey="pv"
-          stroke="#ffc301"
+          stroke={currentColor}
+          fill={`url(#${gradientId})`}
           fillOpacity={1}
-          fill="url(#colorPv)"
-          strokeWidth={5}
+          strokeWidth={3}
         />
       </AreaChart>
     </ResponsiveContainer>
